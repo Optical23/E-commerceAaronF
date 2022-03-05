@@ -52,7 +52,6 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
   Product.update(req.body, {
-    individualHooks: true,
     where: {
       id: req.params.id
     }
