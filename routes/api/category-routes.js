@@ -5,7 +5,12 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   //find all categories
-  Product.findAll()
+  Category.findAll({
+    include: [{
+      model: Product,
+      attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+    }]
+  })
   .then(dbCategoryData => res.status(200).json(dbCategoryData))
   .catch(err => {
     console.log(err);
@@ -17,11 +22,15 @@ router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   try {
     console.log(req.params.id);
-    const dbCategoryData = await Product.findOne(
+    const dbCategoryData = await Category.findOne(
       {
         where: {
           id: req.params.id
-        }
+        },
+        include: [{
+          model: Product,
+          attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+        }]
       }
     );
     if(!dbCategoryData){
@@ -38,7 +47,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', (req, res) => {
   // create a new category
   Category.create({
-    game_title: req.body.category_name
+    category_name: req.body.category_name
   })
   .then(dbCategoryData => {
     res.json(dbCategoryData);
@@ -51,7 +60,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
-  Product.update(req.body, {
+  Category.update(req.body, {
     where: {
       id: req.params.id
     }
@@ -71,7 +80,7 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
-  Category.delete(req.body, {
+  Category.destroy({
     where: {
       id: req.params.id
     }
