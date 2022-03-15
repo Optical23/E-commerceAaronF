@@ -21,7 +21,6 @@ router.get('/', (req, res) => {
 router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   try {
-    console.log(req.params.id);
     const dbCategoryData = await Category.findOne(
       {
         where: {
